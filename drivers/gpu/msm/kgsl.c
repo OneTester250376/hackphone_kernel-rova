@@ -21,6 +21,9 @@
 #include <linux/sort.h>
 #include <asm/cacheflush.h>
 
+#include "kgsl.h"
+#include "kgsl_drawobj.h"
+#include "kgsl_sharedmem.h"
 #include "kgsl_compat.h"
 #include "kgsl_debugfs.h"
 #include "kgsl_device.h"

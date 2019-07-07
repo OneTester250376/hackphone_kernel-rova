@@ -1455,6 +1455,7 @@ static unsigned int a6xx_gmu_ifpc_show(struct kgsl_device *device)
 	return gmu->idle_level >= GPU_HW_IFPC;
 }
 
+#if 0
 struct gmu_mem_type_desc {
 	struct gmu_memdesc *memdesc;
 	uint32_t type;
@@ -1670,6 +1671,7 @@ static void a6xx_gmu_snapshot(struct kgsl_device *device,
 				ARRAY_SIZE(a6xx_gmu_gx_registers) / 2);
 	}
 }
+#endif
 
 static void a6xx_gmu_cooperative_reset(struct kgsl_device *device)
 {
@@ -1770,7 +1772,6 @@ struct gmu_dev_ops adreno_a6xx_gmudev = {
 	.wait_for_gmu_idle = a6xx_gmu_wait_for_idle,
 	.ifpc_store = a6xx_gmu_ifpc_store,
 	.ifpc_show = a6xx_gmu_ifpc_show,
-	.snapshot = a6xx_gmu_snapshot,
 	.cooperative_reset = a6xx_gmu_cooperative_reset,
 	.wait_for_active_transition = a6xx_gmu_wait_for_active_transition,
 	.read_ao_counter = a6xx_gmu_read_ao_counter,
