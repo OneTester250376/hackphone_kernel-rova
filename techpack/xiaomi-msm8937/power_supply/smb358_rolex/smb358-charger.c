@@ -1242,7 +1242,7 @@ static int smb358_get_prop_batt_capacity(struct smb358_charger *chip)
 	if (chip->bms_psy) {
 		power_supply_get_property(chip->bms_psy,
 				POWER_SUPPLY_PROP_CAPACITY, &ret);
-				pr_err("BMS_BATTERY_CAPACITY IS:%d\n", ret.intval);
+				pr_debug("BMS_BATTERY_CAPACITY IS:%d\n", ret.intval);
 		return ret.intval;
 	}
 
@@ -1334,7 +1334,7 @@ static int smb358_get_prop_batt_health(struct smb358_charger *chip)
 	else
 		 ret.intval = POWER_SUPPLY_HEALTH_GOOD;
 
-	pr_err("battery health is %d\n", ret.intval);
+	pr_debug("battery health is %d\n", ret.intval);
 	return ret.intval;
 }
 
@@ -1356,7 +1356,7 @@ static int smb358_get_prop_batt_temp(struct smb358_charger *chip)
 		}
 	}
 	batt_therm_result /= 1000;
-	pr_err("get_bat_temp %d", batt_therm_result);
+	pr_debug("get_bat_temp %d", batt_therm_result);
 
 	#ifdef CONFIG_DISABLE_TEMP_PROTECT
 		pr_err("WINGTECH disable temp protect version; real temp:%lld\n", batt_therm_result*10);
@@ -1412,7 +1412,7 @@ smb358_get_prop_battery_voltage_now(struct smb358_charger *chip)
 	if (chip->bms_psy) {
 		power_supply_get_property(chip->bms_psy,
 				POWER_SUPPLY_PROP_VOLTAGE_NOW, &ret);
-		pr_err("POWER_SUPPLY_PROP_VOLTAGE_NOW IS:%d\n", ret.intval);
+		pr_debug("POWER_SUPPLY_PROP_VOLTAGE_NOW IS:%d\n", ret.intval);
 		return ret.intval;
 	}
 	pr_err("Couldn't get bms_psy, return default voltage\n");
