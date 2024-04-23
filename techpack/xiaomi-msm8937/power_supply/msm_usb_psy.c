@@ -209,7 +209,15 @@ static int msm_usb_psy_set_property(struct power_supply *psy,
 			break;
 		case POWER_SUPPLY_PROP_CURRENT_MAX:
 		case POWER_SUPPLY_PROP_SDP_CURRENT_MAX:
-			data->current_max = val->intval / 1000;
+			// Reset to defaults according to USB type on negative values
+			if (val->intval < 0) {
+				if (data->usb_psy_d.type == POWER_SUPPLY_TYPE_USB)
+					data->current_max = 500;
+				else /* DCP or CDP */
+					data->current_max = 1000;
+			} else {
+				data->current_max = val->intval / 1000;
+			}
 			break;
 
 		default:
