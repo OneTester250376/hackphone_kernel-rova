@@ -41,6 +41,8 @@ static const char *goodix_input_phys = "input/ts";
 struct i2c_client *i2c_connect_client;
 static struct proc_dir_entry *gtp_config_proc;
 
+static struct goodix_ts_data *ts_data_g = NULL;
+
 enum doze {
 	DOZE_DISABLED = 0,
 	DOZE_ENABLED = 1,
@@ -48,6 +50,9 @@ enum doze {
 };
 
 static enum doze doze_status = DOZE_DISABLED;
+
+bool xiaomi_msm8937_touchscreen_gt9xx_ts_probed = false;
+EXPORT_SYMBOL(xiaomi_msm8937_touchscreen_gt9xx_ts_probed);
 
 static int gtp_i2c_test(struct i2c_client *client);
 static int gtp_enter_doze(struct goodix_ts_data *ts);
@@ -2014,6 +2019,9 @@ static int gtp_probe(struct i2c_client *client, const struct i2c_device_id *id)
 #endif
 
 	xiaomi_msm8937_touchscreen_is_probed = true;
+	xiaomi_msm8937_touchscreen_gt9xx_ts_probed = true;
+	ts_data_g = ts;
+
 	return 0;
 
 //exit_powermanager:
@@ -2496,6 +2504,26 @@ static void __exit gtp_exit(void)
 	pr_info("Gt9xx driver exited\n");
 	i2c_del_driver(&goodix_ts_driver);
 }
+
+#if IS_ENABLED(CONFIG_POCKET_JUDGE)
+void xiaomi_msm8937_touchscreen_gtp_inpocket_set(bool active)
+{
+	struct goodix_ts_data *ts = ts_data_g;
+
+	if (!ts || !ts->client->irq)
+		return;
+
+	mutex_lock(&ts->lock);
+
+	if (active)
+		disable_irq(ts->client->irq);
+	else
+		enable_irq(ts->client->irq);
+
+	mutex_unlock(&ts->lock);
+}
+EXPORT_SYMBOL(xiaomi_msm8937_touchscreen_gtp_inpocket_set);
+#endif
 
 module_exit(gtp_exit);
 

@@ -26,11 +26,36 @@
  * @hide
  */
 
+#if IS_ENABLED(CONFIG_TOUCHSCREEN_FTS_MI8937)
+extern bool xiaomi_msm8937_touchscreen_fts_ts_probed;
+#endif
+#if IS_ENABLED(CONFIG_TOUCHSCREEN_GT9XX_MI8937)
+extern bool xiaomi_msm8937_touchscreen_gt9xx_ts_probed;
+#endif
+
+#if IS_ENABLED(CONFIG_TOUCHSCREEN_FTS_MI8937)
+extern void xiaomi_msm8937_touchscreen_fts_ts_inpocket_set(bool active);
+#endif
+#if IS_ENABLED(CONFIG_TOUCHSCREEN_GT9XX_MI8937)
+extern void xiaomi_msm8937_touchscreen_gtp_inpocket_set(bool active);
+#endif
+
 static char pocket_judge_inpocket_state = '0';
 static bool pocket_judge_inpocket = false;
 
 static void pocket_judge_update(void)
 {
+#if IS_ENABLED(CONFIG_TOUCHSCREEN_FTS_MI8937)
+	if (xiaomi_msm8937_touchscreen_fts_ts_probed) {
+		xiaomi_msm8937_touchscreen_fts_ts_inpocket_set(pocket_judge_inpocket);
+	}
+#endif
+
+#if IS_ENABLED(CONFIG_TOUCHSCREEN_GT9XX_MI8937)
+	if (xiaomi_msm8937_touchscreen_gt9xx_ts_probed) {
+		xiaomi_msm8937_touchscreen_gtp_inpocket_set(pocket_judge_inpocket);
+	}
+#endif
 }
 
 bool pocket_judge_isInPocket(void) {

@@ -107,6 +107,9 @@ static void fts_ts_panel_notifier_callback(enum panel_event_notifier_tag tag,
 		 struct panel_event_notification *event, void *client_data);
 #endif
 
+bool xiaomi_msm8937_touchscreen_fts_ts_probed = false;
+EXPORT_SYMBOL(xiaomi_msm8937_touchscreen_fts_ts_probed);
+
 /*****************************************************************************
 * Static function prototypes
 *****************************************************************************/
@@ -3779,6 +3782,7 @@ static int fts_ts_i2c_probe(struct i2c_client *client, const struct i2c_device_i
 
 	FTS_INFO("Touch Screen(I2C BUS) driver prboe successfully");
 	xiaomi_msm8937_touchscreen_is_probed = true;
+	xiaomi_msm8937_touchscreen_fts_ts_probed = true;
 	return 0;
 }
 
@@ -3944,6 +3948,17 @@ static void __exit fts_ts_exit(void)
 	fts_ts_i2c_exit();
 	fts_ts_spi_exit();
 }
+
+#if IS_ENABLED(CONFIG_POCKET_JUDGE)
+void xiaomi_msm8937_touchscreen_fts_ts_inpocket_set(bool active)
+{
+	if (active)
+		fts_irq_disable();
+	else
+		fts_irq_enable();
+}
+EXPORT_SYMBOL(xiaomi_msm8937_touchscreen_fts_ts_inpocket_set);
+#endif
 
 module_exit(fts_ts_exit);
 
