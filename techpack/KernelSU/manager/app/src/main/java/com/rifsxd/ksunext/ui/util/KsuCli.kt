@@ -214,7 +214,7 @@ fun flashModule(
 fun runModuleAction(
     moduleId: String, onStdout: (String) -> Unit, onStderr: (String) -> Unit
 ): Boolean {
-    val shell = getRootShell()
+    val shell = createRootShell(true)
 
     val stdoutCallback: CallbackList<String?> = object : CallbackList<String?>() {
         override fun onAddElement(s: String?) {
@@ -501,6 +501,51 @@ fun moduleRestore(): Boolean {
     val result = ShellUtils.fastCmd(shell, moveCommand).trim()
 
     return result.isEmpty()
+}
+
+private fun getSuSFSDaemonPath(): String {
+    return ksuApp.applicationInfo.nativeLibraryDir + File.separator + "libsusfsd.so"
+}
+
+fun getSuSFS(): String {
+    val shell = getRootShell()
+    val result = ShellUtils.fastCmd(shell, "${getSuSFSDaemonPath()} support")
+    return result
+}
+
+fun getSuSFSVersion(): String {
+    val shell = getRootShell()
+    val result = ShellUtils.fastCmd(shell, "${getSuSFSDaemonPath()} version")
+    return result
+}
+
+fun getSuSFSVariant(): String {
+    val shell = getRootShell()
+    val result = ShellUtils.fastCmd(shell, "${getSuSFSDaemonPath()} variant")
+    return result
+}
+fun getSuSFSFeatures(): String {
+    val shell = getRootShell()
+    val result = ShellUtils.fastCmd(shell, "${getSuSFSDaemonPath()} features")
+    return result
+}
+
+fun susfsSUS_SU_0(): String {
+    val shell = getRootShell()
+    val result = ShellUtils.fastCmd(shell, "${getSuSFSDaemonPath()} sus_su 0")
+    return result
+}
+
+fun susfsSUS_SU_2(): String {
+    val shell = getRootShell()
+    val result = ShellUtils.fastCmd(shell, "${getSuSFSDaemonPath()} sus_su 2")
+    return result
+}
+
+fun susfsSUS_SU_Mode(): String {
+    val shell = getRootShell()
+    val result = ShellUtils.fastCmd(shell, "${getSuSFSDaemonPath()} sus_su mode")
+    return result
 }
 
 fun setAppProfileTemplate(id: String, template: String): Boolean {
